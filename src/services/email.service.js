@@ -11,15 +11,14 @@ export const listMessages = async (auth) => {
   return messages;
 };
 
-
-const findPart = (parts, mimeType) => {
+const findPlainTextPart = (parts) => {
   if (!parts) return null;
   for (const part of parts) {
-    if (part.mimeType === mimeType) {
+    if (part.mimeType === 'text/plain') {
       return part.body.data;
     }
     if (part.parts) {
-      const found = findPart(part.parts, mimeType);
+      const found = findPlainTextPart(part.parts);
       if (found) return found;
     }
   }
@@ -32,17 +31,19 @@ export const getMessageContent = async (auth, messageId) => {
 
   const payload = res.data.payload;
   const parts = payload.parts || [];
-  const data = findPart(parts, 'text/html') || findPart(parts, 'text/plain');
+  const data = findPlainTextPart(parts);
   
   if (!data) {
-    throw new Error('No email body found');
+    throw new Error('No plain text email body found');
   }
   
   const emailBody = Buffer.from(data, 'base64').toString('utf-8');
   const attachments = parts.filter(part => part.filename).map(part => part.filename);
-  const sender = payload.headers.find(header => header.name === 'From').value;
+  
+  const fromHeader = payload.headers.find(header => header.name === 'From').value;
+  const senderEmail = fromHeader.match(/<(.*?)>/)[1]; // Extract email within the angle brackets
 
-  return { emailBody, attachments, sender };
+  return { emailBody, attachments, senderEmail };
 };
 
 

@@ -12,12 +12,10 @@ export const getEmails = (req, res) => {
 
       const emailDetails = [];
       for (let message of messages) {
-        console.log("hiy2");
-        const { emailBody, attachments, sender } = await getMessageContent(auth, message.id);
-        console.log("hiy3");
+        const { emailBody, attachments, senderEmail } = await getMessageContent(auth, message.id);
         const summary = await summarizeEmailContent(emailBody);
         const links = extractLinks(emailBody);
-        emailDetails.push({ sender, summary, attachments, links });
+        emailDetails.push({ senderEmail, summary, attachments, links, emailBody });
       }
 
       res.status(200).json(emailDetails);
