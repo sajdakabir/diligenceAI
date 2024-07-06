@@ -1,1 +1,1 @@
-# email-summary-app
+# diligenceAI
