@@ -8,7 +8,6 @@ const TOKEN_PATH = 'token.json';
 
 
  export const authenticateGmail = (callback) => {
-  console.log("i am authenticateGmail fun");
   const oAuth2Client = new OAuth2Client(environment.GOOGLE_CLIENT_ID, environment.GOOGLE_CLIENT_SECRET, environment.GOOGLE_REDIRECT_URL);
   fs.readFile(TOKEN_PATH, (err, token) => {
     if (err) return getNewToken(oAuth2Client, callback);

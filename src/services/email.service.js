@@ -11,23 +11,6 @@ export const listMessages = async (auth) => {
   return messages;
 };
 
-// export const getMessageContent = async (auth, messageId) => {
-
-//   const gmail = google.gmail({ version: 'v1', auth });
-//   const res = await gmail.users.messages.get({
-//     userId: 'me',
-//     id: messageId,
-//   });
-//   console.log("am i working3");
-//   const parts = res.data.payload.parts || [];
-//   const emailBody = Buffer.from(parts[0].body.data, 'base64').toString('utf-8');
-//   console.log("sajda: ", emailBody);
-//   // const attachments = parts.filter(part => part.filename).map(part => part.filename);
-//   const sender = res.data.payload.headers.find(header => header.name === 'From').value;
-//   console.log("then working");
-//   return { emailBody, attachments, sender };
-// };
-
 
 const findPart = (parts, mimeType) => {
   if (!parts) return null;
